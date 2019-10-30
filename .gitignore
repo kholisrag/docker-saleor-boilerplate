@@ -1,0 +1,2 @@
+./config/letsencrypt/*
+!./config/letsencrypt/domains.conf
