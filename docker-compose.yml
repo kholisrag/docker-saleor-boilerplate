@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+  store:
+    build:
+      context: ../saleor-storefront
+      dockerfile: ./Dockerfile
+    expose:
+      - "80"
+    ports:
+      - "3000:80"
+    restart: unless-stopped
+    networks:
+      - saleor-backend-tier
+    env_file: common.env
+  dashboard:
+    build:
+      context: ../saleor-dashboard
+      dockerfile: ./Dockerfile
+    expose:
+      - "80"
+    ports:
+      - "9000:80"
+    restart: unless-stopped
+    networks:
+      - saleor-backend-tier
+    env_file: common.env
+
+networks:
+  saleor-backend-tier:
+    external:
+      name: saleor_saleor-backend-tier
