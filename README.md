@@ -5,6 +5,9 @@ Docker-Compose for running [saleor](https://github.com/mirumee/saleor), [storefr
 How to run:
 - Run [saleor](https://github.com/mirumee/saleor), follow their guide in [docker guide](https://docs.saleor.io/docs/next/getting-started/docker/)
 
+- Clone this repo
+- Run :
+
 ```bash
     docker-compose up -d build
 ```
