@@ -1,6 +1,11 @@
 config/letsencrypt/*
 config/letsencrypt/.*
 !config/letsencrypt/domains.conf
+!config/letsencrypt/live
+!config/letsencrypt/archive
+config/letsencrypt/live/.*
+config/letsencrypt/live/README
+config/letsencrypt/archive/.*
 config/nginx/conf.d/default.conf
 config/nginx/logs
 saleor-dashboard
