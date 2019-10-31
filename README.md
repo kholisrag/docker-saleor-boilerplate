@@ -1,6 +1,6 @@
 # Docker-Compose for Saleor Frontend ([storefront](https://github.com/mirumee/saleor-storefront) & [dashboard](https://github.com/mirumee/saleor-dashboard)) with [letsencrypt + dns challenges](https://github.com/adferrand/docker-letsencrypt-dns)
 
-Docker-Compose for running [saleor](https://github.com/mirumee/saleor), [storefront](https://github.com/mirumee/saleor-storefront) & [dashboard](https://github.com/mirumee/saleor-dashboard)
+Docker-Compose for running [saleor](https://github.com/mirumee/saleor), [storefront](https://github.com/mirumee/saleor-storefront) & [dashboard](https://github.com/mirumee/saleor-dashboard) with [letsencrypt + dns challenges](https://github.com/adferrand/docker-letsencrypt-dns)
 
 How to run:
 
