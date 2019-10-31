@@ -1,6 +1,8 @@
 server {
     listen 443 ssl http2;
     server_name ${NGINX_SERVER_NAME} ${NGINX_SERVER_NAME_ALIAS};
+    ssl_certificate /etc/letsencrypt/live/${NGINX_SERVER_NAME}/fullchain.pem; 
+    ssl_certificate_key /etc/letsencrypt/live/${NGINX_SERVER_NAME}/privkey.pem; 
     include misc/ssl_params;
     root /app/;
 
