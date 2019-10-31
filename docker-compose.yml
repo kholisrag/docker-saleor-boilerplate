@@ -1,30 +1,46 @@
-version: '3'
+version: '3.7'
 
 services:
-  store:
-    build:
-      context: ../saleor-storefront
-      dockerfile: ./Dockerfile
-    expose:
-      - "80"
-    ports:
-      - "3000:80"
-    restart: unless-stopped
-    networks:
-      - saleor-backend-tier
+  letsencrypt:
+    image: adferrand/letsencrypt-dns
+    container_name: "letsencrypt-dns"
+    command: >
+      /bin/bash -c "openssl dhparam -dsaparam -out /etc/letsencrypt/ssl-dhparams.pem 4096
+      && /scripts/run.sh"
     env_file: common.env
-  dashboard:
-    build:
-      context: ../saleor-dashboard
-      dockerfile: ./Dockerfile
-    expose:
-      - "80"
-    ports:
-      - "9000:80"
-    restart: unless-stopped
+    volumes:
+      - ./config/letsencrypt/domains.conf:/etc/letsencrypt/domains.conf
+      - ./config/letsencrypt/:/etc/letsencrypt
+    restart: always
     networks:
-      - saleor-backend-tier
+      saleor-backend-tier:
+        aliases: 
+          - letsencrypt
+  nginx:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    container_name: "nginx-ingress"
     env_file: common.env
+    restart: always
+    command: >
+        /bin/bash -c "envsubst < /etc/nginx/conf.d/template > /etc/nginx/conf.d/default.conf 
+        && exec nginx -g 'daemon off;'"
+    depends_on:
+      - letsencrypt
+    volumes: 
+      - ./config/letsencrypt:/etc/letsencrypt
+      - ./config/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./config/nginx/misc:/etc/nginx/misc
+      - ./config/nginx/conf.d:/etc/nginx/conf.d
+      - ./config/nginx/logs:/var/log/nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      saleor-backend-tier:
+        aliases: 
+          - nginx
 
 networks:
   saleor-backend-tier:
