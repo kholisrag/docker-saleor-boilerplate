@@ -3,7 +3,8 @@
 Docker-Compose for running [saleor](https://github.com/mirumee/saleor), [storefront](https://github.com/mirumee/saleor-storefront) & [dashboard](https://github.com/mirumee/saleor-dashboard)
 
 How to run:
--edit necessary environment in `common.env`
+
+- edit necessary environment in `common.env`
 
 ```bash
 git clone https://github.com/petrukngantuk/docker-saleor-store
