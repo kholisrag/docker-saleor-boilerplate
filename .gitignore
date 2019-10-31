@@ -3,3 +3,5 @@ config/letsencrypt/.*
 !config/letsencrypt/domains.conf
 config/nginx/conf.d/default.conf
 config/nginx/logs
+saleor-dashboard
+saleor-storefront
