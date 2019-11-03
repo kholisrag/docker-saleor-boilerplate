@@ -4,8 +4,10 @@ Docker-Compose for running [saleor](https://github.com/mirumee/saleor), [storefr
 
 How to run:
 
+- run [saleor](https://github.com/mirumee/saleor) using [docker guide](https://docs.saleor.io/docs/getting-started/docker/) and change environment variables according to your setup
 - edit necessary environment in `common.env`
 - change domain in `config/letsencrypt/domains.conf` to your desired domain
+- then follow below step :
 
 ```bash
 git clone https://github.com/petrukngantuk/docker-saleor-store

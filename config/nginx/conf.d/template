@@ -1,3 +1,28 @@
+map ${DOLLAR}http_origin ${DOLLAR}origin_allowed {
+   default 0;
+   https://${NGINX_SERVER_NAME} 1;
+}
+
+map ${DOLLAR}origin_allowed ${DOLLAR}origin {
+   default "";
+   1 ${DOLLAR}http_origin;
+}
+
+upstream saleor_backend {
+    server  web:8000;
+    keepalive 32;
+}
+
+upstream dashboard {
+    server  dashboard:80;
+    keepalive 32;
+}
+
+upstream storefront {
+    server  storefront:80;
+    keepalive 32;
+}
+
 server {
     listen 443 ssl http2;
     server_name ${NGINX_SERVER_NAME} ${NGINX_SERVER_NAME_ALIAS};
@@ -6,19 +31,42 @@ server {
     include misc/ssl_params;
     root /app/;
 
+    if (${DOLLAR}host = ${NGINX_SERVER_NAME_ALIAS}) {
+        return 301 https://${NGINX_SERVER_NAME}${DOLLAR}request_uri;
+    } 
+
     location / {
-        alias /app/storefront/;
-        index  index.html;
-        try_files ${DOLLAR}uri ${DOLLAR}uri/ /index.html${DOLLAR}args;
+        include misc/proxy_cache;
+        include misc/proxy_params;
+        include misc/cors_params;
+        proxy_pass http://storefront/;
     }
 
-    location /dashboard/ {
-        alias /app/dashboard/dashboard/;
-        index  index.html;
-        try_files ${DOLLAR}uri ${DOLLAR}uri/ /dashboard/index.html${DOLLAR}args;
+    location /dashboard {
+        include misc/proxy_cache;
+        include misc/proxy_params;
+        include misc/cors_params;
+        proxy_pass http://dashboard/;
+    }
+
+    location /graphql/ {
+        include misc/proxy_cache;
+        include misc/proxy_params;
+        include misc/cors_params;
+        proxy_pass http://saleor_backend/graphql/;
+    }
+
+    location /media {
+        include misc/proxy_cache;
+        include misc/cors_params;
+        alias /app/media;
+        access_log off;
+        expires 1M;
+        add_header Cache-Control "public";
+        add_header Vary Accept-Encoding;
     }
     
-    error_log  /var/log/nginx/saleor.log info;
+    error_log  /var/log/nginx/saleor.log warn;
 }
 
 server {
