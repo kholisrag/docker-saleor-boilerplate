@@ -21,3 +21,5 @@ saleor-dashboard
 saleor-storefront
 saleor
 !config/saleor
+!config/saleor-dashboard
+!config/saleor-storefront
