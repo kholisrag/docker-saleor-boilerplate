@@ -19,3 +19,5 @@ config/nginx/conf.d/default.conf
 config/nginx/logs
 saleor-dashboard
 saleor-storefront
+saleor
+!config/saleor

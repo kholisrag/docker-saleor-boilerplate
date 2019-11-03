@@ -1,0 +1,49 @@
+version: '2'
+
+services:
+  web:
+    expose:
+      - "8000"
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./saleor/:/app/saleor:Z
+      - ./templates/:/app/templates:Z
+      - ./tests/:/app/tests
+      # prevents overshadowing of build-time assets
+      - /app/saleor/static/assets
+      - /app/templates/templated_email/compiled
+      # shared volume between celery and web for media
+      - saleor-media:/app/media
+    env_file: yourown.env
+    networks:
+      saleor-backend-tier:
+        aliases:
+          - web
+  db:
+    expose:
+      - "5432"
+    networks:
+      saleor-backend-tier:
+        aliases:
+          - db
+
+  redis:
+    expose:
+      - "6379"
+    networks:
+      saleor-backend-tier:
+        aliases:
+          - redis
+
+  celery:
+    volumes:
+      - ./saleor/:/app/saleor:Z
+      - ./templates/:/app/templates:Z
+      # prevents overshadowing of build-time assets
+      - /app/templates/templated_email/compiled
+      # shared volume between celery and web for media
+      - saleor-media:/app/media
+    env_file: yourown.env
+
+volumes:
+  saleor-media:
